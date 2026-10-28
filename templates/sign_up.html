@@ -1,0 +1,39 @@
+{% extends "base.html" %} {% block title %}Sign up{% endblock %} {% block
+content %}
+<div class="signup-page">
+  <h1>Create Your Account</h1>
+
+  {% if error %}
+  <p class="signup-error">{{ error }}</p>
+  {% endif %}
+
+  <form action="{{ url_for('register') }}" method="POST">
+    <div class="signup-field">
+      <label for="username">Username</label>
+      <input type="text" id="username" name="username" autocomplete="off" />
+    </div>
+
+    <div class="signup-field">
+      <label for="password">Password</label>
+      <input type="text" id="password" name="password" autocomplete="off" />
+    </div>
+
+    <div class="signup-field">
+      <label for="confirmation">Confirmation</label>
+      <input
+        type="text"
+        id="confirmation"
+        name="confirmation"
+        autocomplete="off"
+      />
+    </div>
+
+    <button type="submit">Create Account</button>
+  </form>
+
+  <p>
+    Already have an account?
+    <a href="{{ url_for('login') }}">Log in</a>
+  </p>
+</div>
+{% endblock %}

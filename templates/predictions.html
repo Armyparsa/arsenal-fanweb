@@ -1,0 +1,40 @@
+{% extends "base.html" %} {% block title %}Predictions{% endblock %} {% block
+content %}
+<div class="predictions-page">
+  <h1>Predict Match Results</h1>
+  <p>Predict the score and earn points!</p>
+
+  {% for match in matches %}
+  <div class="prediction-card">
+    <h2>Arsenal vs {{ match["opponent"] }}</h2>
+    <p>{{ match["competition"] }}</p>
+    <p>{{ match["match_datetime"] }}</p>
+
+    <form action="{{ url_for('predictions') }}" method="POST">
+      <input type="hidden" name="match_id" value="{{ match['id'] }}" />
+
+      <label>Arsenal Score</label>
+      <input
+        type="number"
+        name="home_score"
+        min="0"
+        value="{{ match['predicted_home'] if match['predicted_home'] is not none else '' }}"
+      />
+
+      <label>Opponent Score</label>
+      <input
+        type="number"
+        name="away_score"
+        min="0"
+        value="{{ match['predicted_away'] if match['predicted_away'] is not none else '' }}"
+      />
+
+      <button type="submit">Save Prediction</button>
+    </form>
+  </div>
+  {% else %}
+  <p>No matches available</p>
+  {% endfor %}
+</div>
+
+{% endblock %}

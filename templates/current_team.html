@@ -1,0 +1,199 @@
+{% extends "base.html" %} {% block title %}Current Team{% endblock %} {% block
+content %}
+<header class="ct">
+  <h1>Current Team</h1>
+  <p></p>
+  <div class="header-line"></div>
+</header>
+<div class="container3">
+  <div class="line-up">
+    <h2>Team Line-up</h2>
+    <div class="squad-image">
+      <img
+        src="https://cdn.mylineups.app/lineups/premier-league/aston-villa-vs-arsenal-2026-08-31/away-plain.webp"
+        alt="line-up"
+      />
+    </div>
+  </div>
+  <div class="substitutes">
+    <h3>Team Substitutions</h3>
+    <div class="sub-grid">
+      <div calss="sub-item">
+        <span class="sub-number">13</span>
+        <div class="sub-info">
+          <div class="sub-name">Arrizabalaga</div>
+          <div class="sub-pos">Goalkeeper</div>
+        </div>
+      </div>
+      <div calss="sub-item">
+        <span class="sub-number">5</span>
+        <div class="sub-info">
+          <div class="sub-name">Hincapie</div>
+          <div class="sub-pos">Defender</div>
+        </div>
+      </div>
+      <div calss="sub-item">
+        <span class="sub-number">15</span>
+        <div class="sub-info">
+          <div class="sub-name">Mosquera</div>
+          <div class="sub-pos">Defender</div>
+        </div>
+      </div>
+      <div calss="sub-item">
+        <span class="sub-number">23</span>
+        <div class="sub-info">
+          <div class="sub-name">Merino</div>
+          <div class="sub-pos">Midfielder</div>
+        </div>
+      </div>
+      <div calss="sub-item">
+        <span class="sub-number">36</span>
+        <div class="sub-info">
+          <div class="sub-name">Zubimendi</div>
+          <div class="sub-pos">Midfielder</div>
+        </div>
+      </div>
+      <div calss="sub-item">
+        <span class="sub-number">14</span>
+        <div class="sub-info">
+          <div class="sub-name">Gyokeres</div>
+          <div class="sub-pos">Attacker</div>
+        </div>
+      </div>
+      <div calss="sub-item">
+        <span class="sub-number">20</span>
+        <div class="sub-info">
+          <div class="sub-name">madueke</div>
+          <div class="sub-pos">Attacker</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="team-staff">
+    <h3>Coaching Staff</h3>
+    <div calss="staff-grid">
+      <div class="staff-item">
+        <span class="staff-avatar"></span>
+        <div class="staff-name">Mikel Arteta</div>
+        <div class="staff-role">Manager</div>
+      </div>
+      <div class="staff-item">
+        <span class="staff-avatar"></span>
+        <div class="staff-name">Albert Stuivenberg</div>
+        <div class="staff-role">Assistant manager</div>
+      </div>
+      <div class="staff-item">
+        <span class="staff-avatar"></span>
+        <div class="staff-name">Gabriel Heinze</div>
+        <div class="staff-role">Assistant coach</div>
+      </div>
+      <div class="staff-item">
+        <span class="staff-avatar"></span>
+        <div class="staff-name">Nicolas Jover</div>
+        <div class="staff-role">Set-piece coach</div>
+      </div>
+      <div class="staff-item">
+        <span class="staff-avatar"></span>
+        <div class="staff-name">Inaki Cana Pavon</div>
+        <div class="staff-role">Goalkeeping coach</div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="container2">
+  <div class="lineup-builder">
+    <h2>Build Your Arsenal XI</h2>
+
+    <div class="formation-box">
+      <label for="formation-select">Formation:</label>
+
+      <select id="formation-select">
+        {% for formation in formations %}
+        <option value="{{ formation }}"
+          {% if lineup and lineup['formation'] == formation %}selected{% endif
+          %}> {{ formation }}
+        </option>
+        {% endfor %}
+      </select>
+    </div>
+
+    <div class="football-pitch">
+      <div class="pitch-slots" id="pitch-slots"></div>
+    </div>
+
+    <button type="button" id="save-lineup">Save Line-up</button>
+  </div>
+  <div class="transfer-news">
+    <h3>Latest transfer news</h3>
+    <div class="transfer-grid">
+      <div class="transfer-item">
+        <div class="transfer-image">
+          <img
+            src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTqWiaxETaxi_A0pVlzogBmNTPlLI79UNY6oXrAkhXZpNEW7ctDIIaexnucj40UobYKxZk34E15CPqUEbcj7ibwxg5yC06neA_ur87-ji4&s=10"
+            alt="Bruno Guimarães"
+          />
+        </div>
+        <div class="transfer-body">
+          <span class="transfer-span">joins</span>
+          <h4>Bruno Guimarães</h4>
+          <p>
+            Arsenal have signed Bruno Guimaraes from Newcastle; Gunners had
+            opening bid rejected before agreeing a £75m fee; Guimaraes had two
+            years remaining on his contract at Newcastle; the 28-year-old told
+            Newcastle he wanted to leave; Newcastle have sold over £240m worth
+            of talent
+          </p>
+          <span class="transfer-date">9 August 2026</span>
+        </div>
+      </div>
+      <div class="transfer-item">
+        <div class="transfer-image">
+          <img
+            src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ6Avpq15A7HLz_UBVXKfBS0fDHN-y09JiM74j1bluK-WGULKPMpu2yVOB77nMOXR3GDTbu1nRPRYeSnP2FWD2NK_UDT2sjxM6xTXWNpKk&s=10"
+            alt="Christos Tzolis"
+          />
+        </div>
+        <div class="transfer-body">
+          <span class="transfer-span">Joins</span>
+          <h4>Christos Tzolis</h4>
+          <p>
+            Arsenal have completed the signing of Christos Tzolis from Club
+            Brugge; the Greek winger joins for a £34m fee, which is a Belgian
+            Pro League record; Tzolis has been signed as a replacement for
+            Leandro Trossard, who departed for Besiktas in a £17m deal
+          </p>
+          <span class="transfer-date">23 July 2026</span>
+        </div>
+      </div>
+      <div class="transfer-item">
+        <div class="transfer-image">
+          <img
+            src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSt2TLNGtWMXnxf0H4obGbzXaxAgQVOQ5LaA5dPMiSNdD2S3v7dAeyJwXr2G-Cz6LxGb_vi15XW3JN6i-nfVwnbbWDmnX8k9BaJz9DNv14&s=10"
+            alt="Ezri Konsa"
+          />
+        </div>
+        <div class="transfer-body">
+          <span class="transfer-span">Joins</span>
+          <h4>Ezri Konsa</h4>
+          <p>
+            Ezri Konsa completes £55m move to Arsenal from Aston Villa; England
+            defender provides additional competition in defence for the Premier
+            League champions; Konsa's signing comes with William Saliba out for
+            an extended period, plus Jurrien Timber is also injured
+          </p>
+          <span class="transfer-date">21 August 2026</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div
+  id="lineup-data"
+  data-formations="{{ formations | tojson | forceescape }}"
+  data-players="{{ players | tojson | forceescape }}"
+  data-saved-players="{{ lineup_players | tojson | forceescape }}"
+></div>
+
+<script src="{{ url_for('static', filename='js/lineup.js') }}"></script>
+{% endblock %}

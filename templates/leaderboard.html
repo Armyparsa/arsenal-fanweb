@@ -1,0 +1,15 @@
+{% extends "base.html" %} {% block title %}LeaderBoard{% endblock %} {% block
+content %}
+<div class="container">
+  <h1>Leaderboard</h1>
+
+  {% for user in users %}
+  <div class="leaderboard-row">
+    <span>{{ loop.index }}. {{ user['username'] }}</span>
+    <span>{{ user['total_points'] }} points</span>
+  </div>
+  {% else %}
+  <p>No users found</p>
+  {% endfor %}
+</div>
+{% endblock %}

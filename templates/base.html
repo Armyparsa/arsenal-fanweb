@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <title>{% block title %}My Title{% endblock %}</title>
+    <link rel="stylesheet" href="/static/styles.css" />
+  </head>
+  <body>
+    <nav class="navbar">
+      <div class="logo">
+        <a href="/"
+          ><img
+            src="images/Arsenal-FC-Logo-Premier-League-Football-Club.png"
+            alt="Logo"
+        /></a>
+        <h3 class="logo-text"><a href="/">Arsenal FC</a></h3>
+      </div>
+      <ul class="nav-links">
+        <li><a href="{{ url_for('hall') }}">Hall Of Fame</a></li>
+        <li><a href="{{ url_for('team') }}">Current Team</a></li>
+        <li><a href="{{ url_for('leaderboard') }}">Leaderboard</a></li>
+        {% if current_user and current_user['is_admin'] %}
+        <li><a href="{{ url_for('admin_results') }}">Admin</a></li>
+        {% endif %}
+      </ul>
+      <div class="btns">
+        {% if current_user %}
+        <span>Welcome, {{ current_user['username'] }}</span>
+
+        <form action="{{ url_for('logout') }}" method="POST">
+          <button class="btn" type="submit">Logout</button>
+        </form>
+        {% else %}
+        <button class="btn">
+          <a href="{{ url_for('register') }}">Sign Up</a>
+        </button>
+
+        <button class="btn">
+          <a href="{{ url_for('login') }}">Login</a>
+        </button>
+        {% endif %}
+      </div>
+    </nav>
+    {% with messages = get_flashed_messages(with_categories=true) %} {% if
+    messages %} {% for category, message in messages %}
+    <div class="flash-message {{ category }}">{{ message }}</div>
+    {% endfor %} {% endif %} {% endwith %}
+    <main>{% block content %} {% endblock %}</main>
+
+    <footer>
+      <div class="footer-content">
+        <div>
+          <h4>Arsenal</h4>
+          <p>The London Gunners fan community. We proudly support Arsenal.</p>
+        </div>
+        <div>
+          <h4>Quick Links</h4>
+          <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="hall_of_fame.html">Hall Of Fame</a></li>
+            <li><a href="current_team.html">Current Team</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4>Social Media</h4>
+          <ul>
+            <li><a href="https://www.facebook.com/Arsenal">Facebook</a></li>
+            <li><a href="https://twitter.com/Arsenal">Twitter</a></li>
+            <li><a href="https://www.instagram.com/arsenal/">Instagram</a></li>
+            <li>
+              <a href="https://www.youtube.com/user/ArsenalTour">YouTube</a>
+            </li>
+          </ul>
+        </div>
+        <div>
+          <h4>Contact</h4>
+          <ul>
+            <li><a href="mailto:info@arsenal.com">Email</a></li>
+            <li><a href="tel:+441711234567">Phone</a></li>
+          </ul>
+        </div>
+      </div>
+    </footer>
+
+    {% block scripts %}{% endblock %}
+  </body>
+</html>

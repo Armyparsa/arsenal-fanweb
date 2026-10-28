@@ -1,0 +1,202 @@
+{% extends "base.html" %} {% block title %}Home Page{% endblock %} {% block
+content %}
+<header class="header-index">
+  <div class="header-content">
+    <h1>Come On You Gunners</h1>
+    <p>Welcome to the arsenal fan community!</p>
+    <div class="header-buttons">
+      <button class="next">Next Game</button>
+      <button class="shop">Shop Now</button>
+    </div>
+  </div>
+</header>
+<section class="countdown">
+  <h3>Next Game Countdown</h3>
+  <p class="match-info">
+    Arsenal vs {{ next_match['opponent'] }} - {{ next_match['match_datetime'] }}
+  </p>
+  <div class="countdown-timer">
+    <div>
+      <span id="days">00</span>
+      <label>Days</label>
+    </div>
+    <div>
+      <span id="hours">00</span>
+      <label>Hours</label>
+    </div>
+    <div>
+      <span id="minutes">00</span>
+      <label>Minutes</label>
+    </div>
+    <div>
+      <span id="seconds">00</span>
+      <label>Seconds</label>
+    </div>
+  </div>
+  <div
+    id="match-data"
+    data-match-date="{{ next_match['match_datetime'] if next_match else '' }}"
+  ></div>
+</section>
+
+<div class="container">
+  <div class="section1">
+    <h3>Club Legends</h3>
+    <div class="legends">
+      <div class="legend-card">
+        <div class="image-placeholder">
+          <img src="images/Henry Wins the Prem.jpeg" alt="Thierry Henry" />
+        </div>
+        <div class="legend-name">
+          <h4>Thierry Henry</h4>
+          <p>Legendery striker</p>
+        </div>
+      </div>
+      <div class="legend-card">
+        <div class="image-placeholder">
+          <img
+            src="images/On this day in 1995, Dennis Bergkamp signed for The Arsenal 😍 (1).jpeg"
+            alt="Dennis Bergkamp"
+          />
+        </div>
+        <div class="legend-name">
+          <h4>Dennis Bergkamp</h4>
+          <p>Dutch wizard</p>
+        </div>
+      </div>
+      <div class="legend-card">
+        <div class="image-placeholder">
+          <img src="images/Tony Adams.jpeg" alt="Tony Adams" />
+        </div>
+        <div class="legend-name">
+          <h4>Tony Adams</h4>
+          <p>Historical captain</p>
+        </div>
+      </div>
+      <div class="legend-card">
+        <div class="image-placeholder">
+          <img src="images/Patrick Vieira (1).jpeg" alt="Patrick Vieira" />
+        </div>
+        <div class="legend-name">
+          <h4>Patrick Vieira</h4>
+          <p>Midfield general</p>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="section2">
+    <h3>Latest News</h3>
+    <div class="news">
+      <div class="news-item">
+        <div class="news-image">
+          <img
+            src="https://e0.365dm.com/26/08/1600x900/skysports-gabriel-martinelli_7329148.jpg?20260823144928"
+            alt="Gabriel Martinelli"
+          />
+        </div>
+        <div class="news-content">
+          <span class="news-date">3 September 2026</span>
+          <h4>Gabriel Martinelli transfer news</h4>
+          <p>
+            Gabriel Martinelli leaves Arsenal in a club-record sale as he joins
+            Al Hilal in a £60m deal; Martinelli made 191 Premier League
+            appearances for the Gunners, but made just 11 starts during their
+            title-winning campaign last season
+          </p>
+        </div>
+      </div>
+      <div class="news-item">
+        <div class="news-image">
+          <img
+            src="https://assets.arsenal.com/prod/images/xl_landscape/69e7ce490017-arsenals-spanish-manager-mikel-arteta-applauds-fans-after-the-english-premier-le.webp"
+            alt="Mikel Arteta"
+          />
+        </div>
+        <div class="news-content">
+          <span class="news-date">04 Sep 2026</span>
+          <h4>Arteta on Alonso, Chelsea and loving his players</h4>
+          <p>
+            Mikel Arteta declared that he loves his players following the
+            closure of the transfer window and ahead of taking on Chelsea this
+            weekend. We made five permanent signings this summer, including
+            Piero Hincapie on a permanent deal, Illan Meslier, Christos Tzolis,
+            Bruno Guimaraes and Ezri Konsa. All focus is now on the pitch as we
+            get ready to take on Chelsea on Sunday at Emirates Stadium and Mikel
+            is fully invested in his squad.
+          </p>
+        </div>
+      </div>
+      <div class="news-item">
+        <div class="news-image">
+          <img
+            src="https://assets.arsenal.com/prod/images/xl_landscape/73690fd3d10c-ab94910igci4wcy.webp"
+            alt="Squad"
+          />
+        </div>
+        <div class="news-content">
+          <span class="news-date">04 Sep 2026</span>
+          <h4>Arsenal provide Champions League squad for 2026/27</h4>
+          <p>
+            Goalkeepers: Kepa Arrizabalaga, David Raya, Illan Meslier Defenders:
+            Riccardo Calafiori, Gabriel, Piero Hincapie, Ezri Konsa, Cristhian
+            Mosquera, William Saliba, Jurrien Timber, Ben White Midfielders:
+            Eberechi Eze, Bruno Guimaraes, Mikel Merino, Martin Odegaard, Declan
+            Rice, Martin Zubimendi Forwards: Viktor Gyokeres, Bukayo Saka,
+            Christos Tzolis, Kai Havertz, Noni Madueke
+          </p>
+        </div>
+      </div>
+      <div class="news-item">
+        <div class="news-image">
+          <img
+            src="https://assets.arsenal.com/prod/images/xl_landscape/9e4973ead3e0-1x1.webp"
+            alt="Chelsea"
+          />
+        </div>
+        <div class="news-content">
+          <span class="news-date">04 Sep 2026</span>
+          <h4>Inside training: Charging up for Chelsea</h4>
+          <p>
+            With Chelsea coming to Emirates Stadium this weekend, we've been
+            putting in the hard work at Sobha Realty Training Centre as we look
+            to make it three wins from three in the Premier League. We've beaten
+            Coventry and Aston Villa in our first two league fixtures, with
+            Chelsea defeating Fulham and Brighton, meaning we both go into the
+            match with six points each.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="highlights-section">
+  <div class="highlights">
+    <h3>Match Highlights</h3>
+    <div class="highlights-grid">
+      <div class="highlights-item">
+        <div class="video"></div>
+        <div class="highlight-info">
+          <span class="highlight-date">1 September 2026</span>
+          <h4>Highlights | Aston Villa 0-1 Arsenal | extended</h4>
+        </div>
+      </div>
+      <div class="highlights-item">
+        <div class="video"></div>
+        <div class="highlight-info">
+          <span class="highlight-date">21 August 2026</span>
+          <h4>Highlights | Arsenal 3-0 Coventry City | extended</h4>
+        </div>
+      </div>
+      <div class="highlights-item">
+        <div class="video"></div>
+        <div class="highlight-info">
+          <span class="highlight-date">16 August 2026</span>
+          <h4>Community Shield highlights: Arsenal 3-0 Man City | extended</h4>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %} {% block scripts %}
+<script src="{{ url_for('static', filename='js/index.js') }}"></script>
+{% endblock %}

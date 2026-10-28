@@ -1,0 +1,37 @@
+{% extends "base.html" %} {% block content %}
+<div class="container">
+  <h1>Manage Match Result</h1>
+
+  {% for match in matches %}
+  <div class="match-card">
+    <h2>Arsenal vs {{ match['opponent'] }}</h2>
+
+    <p>{{ match['competition'] }}</p>
+    <p>{{ match['match_datetime'] }}</p>
+
+    <p>Current result: {{ match['home_score'] }} - {{ match['away_score'] }}</p>
+
+    {% if match['result_confirmed'] %}
+    <p>Result confirmed</p>
+    {% else %}
+    <p>Result not confirmed</p>
+    {% endif %}
+
+    <form
+      action="{{ url_for('set_match_result', match_id=match['id']) }}"
+      method="post"
+    >
+      <label>Arsenal goals</label>
+      <input type="number" name="home_score" min="0" />
+
+      <label>{{ match['opponent'] }} goals</label>
+      <input type="number" name="away_score" min="0" />
+
+      <button type="submit">Save Result</button>
+    </form>
+  </div>
+  {% else %}
+  <p>No matches found</p>
+  {% endfor %}
+</div>
+{% endblock %}
