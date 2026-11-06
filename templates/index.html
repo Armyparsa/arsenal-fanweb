@@ -1,16 +1,23 @@
 {% extends "base.html" %} {% block title %}Home Page{% endblock %} {% block
-content %}
+content %} {% block styles %}
+<link
+  rel="stylesheet"
+  href="{{ url_for('static', filename='css/home.css') }}"
+/>
+{% endblock %}
 <header class="header-index">
   <div class="header-content">
     <h1>Come On You Gunners</h1>
     <p>Welcome to the arsenal fan community!</p>
     <div class="header-buttons">
-      <button class="next">Next Game</button>
-      <button class="shop">Shop Now</button>
+      <a href="#next-game" class="next">Next Game</a>
+      <a href="{{ url_for('predictions') }}" class="prediction"
+        >Make Prediction</a
+      >
     </div>
   </div>
 </header>
-<section class="countdown">
+<section class="countdown" id="next-game">
   <h3>Next Game Countdown</h3>
   <p class="match-info">
     Arsenal vs {{ next_match['opponent'] }} - {{ next_match['match_datetime'] }}
@@ -45,7 +52,10 @@ content %}
     <div class="legends">
       <div class="legend-card">
         <div class="image-placeholder">
-          <img src="images/Henry Wins the Prem.jpeg" alt="Thierry Henry" />
+          <img
+            src="{{ url_for('static', filename='images/Henry Wins the prem.jpeg') }}"
+            alt="Thierry Henry"
+          />
         </div>
         <div class="legend-name">
           <h4>Thierry Henry</h4>
@@ -55,7 +65,7 @@ content %}
       <div class="legend-card">
         <div class="image-placeholder">
           <img
-            src="images/On this day in 1995, Dennis Bergkamp signed for The Arsenal 😍 (1).jpeg"
+            src="{{ url_for('static', filename='images/On this day in 1995, Dennis Bergkamp signed for The Arsenal 😍 (1).jpeg') }}"
             alt="Dennis Bergkamp"
           />
         </div>
@@ -66,7 +76,10 @@ content %}
       </div>
       <div class="legend-card">
         <div class="image-placeholder">
-          <img src="images/Tony Adams.jpeg" alt="Tony Adams" />
+          <img
+            src="{{ url_for('static', filename='images/Tony Adams.jpeg')}}"
+            alt="Tony Adams"
+          />
         </div>
         <div class="legend-name">
           <h4>Tony Adams</h4>
@@ -75,7 +88,10 @@ content %}
       </div>
       <div class="legend-card">
         <div class="image-placeholder">
-          <img src="images/Patrick Vieira (1).jpeg" alt="Patrick Vieira" />
+          <img
+            src="{{ url_for('static', filename='images/Patrick Vieira (1).jpeg')}}"
+            alt="Patrick Vieira"
+          />
         </div>
         <div class="legend-name">
           <h4>Patrick Vieira</h4>

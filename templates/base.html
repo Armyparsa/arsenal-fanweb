@@ -3,16 +3,19 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Document</title>
-    <title>{% block title %}My Title{% endblock %}</title>
-    <link rel="stylesheet" href="/static/styles.css" />
+    <title>{% block title %}Arsenal Fanweb{% endblock %}</title>
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='styles.css')}}"
+    />
+    {% block styels %}{% endblock %}
   </head>
   <body>
     <nav class="navbar">
       <div class="logo">
         <a href="/"
           ><img
-            src="images/Arsenal-FC-Logo-Premier-League-Football-Club.png"
+            src="{{ url_for('static', filename='images/Arsenal-FC-Logo-Premier-League-Football-Club.png') }}"
             alt="Logo"
         /></a>
         <h3 class="logo-text"><a href="/">Arsenal FC</a></h3>
@@ -44,9 +47,16 @@
       </div>
     </nav>
     {% with messages = get_flashed_messages(with_categories=true) %} {% if
-    messages %} {% for category, message in messages %}
-    <div class="flash-message {{ category }}">{{ message }}</div>
-    {% endfor %} {% endif %} {% endwith %}
+    messages %}
+    <div class="flash-container">
+      {% for category, message in messages %}
+      <div class="flash-message {{ category }}" role="status">
+        <span class="flash-icon">$</span>
+        <span>{{ message }}</span>
+      </div>
+      {% endfor %}
+    </div>
+    {% endif %} {% endwith %}
     <main>{% block content %} {% endblock %}</main>
 
     <footer>
@@ -58,9 +68,11 @@
         <div>
           <h4>Quick Links</h4>
           <ul>
-            <li><a href="index.html">Home</a></li>
-            <li><a href="hall_of_fame.html">Hall Of Fame</a></li>
-            <li><a href="current_team.html">Current Team</a></li>
+            <li><a href="{{ url_for('index') }}">Home</a></li>
+            <li><a href="{{ url_for('predictions') }}">Predictions</a></li>
+            <li><a href="{{ url_for('leaderboard') }}">Leaderboard</a></li>
+            <li><a href="{{ url_for('team') }}">Current Team</a></li>
+            <li><a href="{{ url_for('hall') }}">Hall Of Fame</a></li>
           </ul>
         </div>
         <div>

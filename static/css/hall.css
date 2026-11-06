@@ -1,0 +1,361 @@
+.hall-page {
+  min-height: 100vh;
+  overflow: hidden;
+  background: #111318;
+  color: #f4f1eb;
+}
+
+.hall-page * {
+  box-sizing: border-box;
+}
+
+.hof {
+  position: relative;
+  min-height: 460px;
+  padding: 120px 8% 100px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  isolation: isolate;
+  background:
+    radial-gradient(
+      ellipse at 50% 0%,
+      rgba(158, 16, 40, 0.42),
+      transparent 65%
+    ),
+    linear-gradient(180deg, #171920 0%, #111318 100%);
+}
+
+.hof::before {
+  content: "ARSENAL";
+  position: absolute;
+  z-index: -1;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: rgba(244, 241, 235, 0.025);
+  font-size: clamp(80px, 17vw, 220px);
+  font-weight: 950;
+  letter-spacing: -10px;
+  white-space: nowrap;
+}
+
+.hof h1 {
+  margin: 0;
+  color: #f4f1eb;
+  font-size: clamp(44px, 7vw, 82px);
+  font-weight: 950;
+  letter-spacing: -3px;
+}
+
+.hof p {
+  max-width: 650px;
+  margin-top: 22px 0 0;
+  color: #b9bdc7;
+  font-size: 15px;
+  line-height: 1.9;
+}
+
+.hof-container {
+  width: min(1150px, 100%);
+  margin: 0 auto;
+  padding: 35px 30px 100px;
+  color: #f4f1eb;
+}
+
+.bio-section,
+.trophies-section,
+.golden-era,
+.records-section {
+  margin-bottom: 85px;
+}
+
+.bio-section h2,
+.trophies-section h2,
+.golden-era h2,
+.records-section h2 {
+  margin: 0 0 28px;
+  color: #f4f1eb;
+  font-size: clamp(25px, 3vw, 34px);
+  font-weight: 900;
+  letter-spacing: -1px;
+}
+
+.bio-section h2::after,
+.trophies-section h2::after,
+.golden-era h2::after,
+.records-section h2::after {
+  content: "";
+  display: block;
+  width: 48px;
+  height: 4px;
+  margin-top: 14px;
+  background: #9e1028;
+  border-radius: 10px;
+}
+
+.bio-section {
+  padding: 38px;
+  background: linear-gradient(145deg, #1b1e25, #171920);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 18px;
+}
+
+.bio-section p,
+.golden-era p {
+  margin: 0 0 18px;
+  color: #b9bdc7;
+  font-size: 14px;
+  line-height: 2;
+}
+
+.bio-section p:last-child,
+.golden-era p:last-of-type {
+  margin-bottom: 0;
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 18px;
+  margin-bottom: 85px;
+}
+
+.stat-card {
+  position: relative;
+  padding: 30px 15px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  text-align: center;
+  background: #1b1e25;
+  border: 1px solid rgba(216, 184, 121, 0.15);
+  border-radius: 14px;
+  transition: 250ms ease;
+}
+
+.stat-card:hover {
+  transform: translateY(-7px);
+  border-color: #d8b879;
+  box-shadow: 0 12px 35px rgba(0, 0, 0, 0.2);
+}
+
+.stat-number {
+  color: #d8b879;
+  font-size: 46px;
+  font-weight: 950;
+  line-height: 1;
+}
+
+.stat-label {
+  color: #b9bdc7;
+  font-size: 12px;
+  font-weight: 750;
+  letter-spacing: 0.4px;
+}
+
+.trophy-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 18px;
+}
+
+.trophy-item {
+  position: relative;
+  min-height: 190px;
+  padding: 28px 20px;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  background:
+    radial-gradient(
+      circle at 50% 0%,
+      rgba(216, 184, 121, 0.13),
+      transparent 65%
+    ),
+    #1b1e25;
+  border: 1px solid rgba(216, 184, 121, 0.13);
+  border-radius: 15px;
+  transition: 250ms ease;
+}
+
+.trophy-item:hover {
+  transform: translateY(-7px);
+  border-color: rgba(216, 184, 121, 0.6);
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.22);
+}
+
+.trophy-icon {
+  margin-bottom: 15px;
+  font-size: 34px;
+  filter: drop-shadow(0 4px 8px rgba(216, 184, 121, 0.2));
+}
+
+.trophy-name {
+  color: #d5d5d8;
+  font-size: 13px;
+  font-weight: 750;
+  line-height: 1.6;
+}
+
+.trophy-count {
+  margin-top: 12px;
+  color: #d8b879;
+  font-size: 24px;
+  font-weight: 950;
+}
+
+.golden-era {
+  position: relative;
+  padding: 48px;
+  overflow: hidden;
+  background:
+    linear-gradient(135deg, #25202a, #191b22 75%),
+    radial-gradient(
+      ellipse at 100% 0%,
+      rgba(158, 16, 40, 0.28),
+      transparent 55%
+    );
+  border: 1px solid rgba(216, 184, 121, 0.25);
+  border-radius: 20px;
+}
+
+.golden-era::after {
+  content: "49";
+  position: absolute;
+  right: 30px;
+  bottom: -65px;
+  color: rgba(216, 184, 121, 0.045);
+  font-size: 230px;
+  font-weight: 950;
+  line-height: 1;
+  pointer-events: none;
+}
+
+.golden-era h2,
+.golden-era p,
+.golden-era span {
+  position: relative;
+  z-index: 1;
+}
+
+.golden-era span {
+  display: inline-block;
+  margin-top: 25px;
+  padding: 12px 17px;
+  color: #d8b879;
+  background: rgba(216, 184, 121, 0.1);
+  border: 1px solid rgba(216, 184, 121, 0.25);
+  border-radius: 8px;
+  font-size: 12px;
+  font-weight: 850;
+}
+
+.records-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 15px;
+}
+
+.record-item {
+  padding: 25px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  background: #1b1e25;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-left: 3px solid #9e1028;
+  border-radius: 10px;
+  transition: 250ms ease;
+}
+
+.record-item:hover {
+  transform: translateX(5px);
+  border-color: rgba(216, 184, 121, 0.35);
+  border-left-color: #b8b879;
+}
+
+.record-name {
+  color: #9da2ad;
+  font-size: 12px;
+  font-weight: 750;
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+}
+
+.record-value {
+  color: #f4f1eb;
+  font-size: 17px;
+  font-weight: 850;
+  line-height: 1.6;
+}
+
+@media (max-width: 750px) {
+  .hof {
+    min-height: 340px;
+    padding: 90px 6% 70px;
+  }
+
+  .hof-container {
+    padding: 25px 20px 70px;
+  }
+
+  .bio-section {
+    padding: 28px;
+  }
+
+  .stats-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+  }
+
+  .trophy-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+  }
+
+  .golden-era {
+    padding: 30px;
+  }
+
+  .records-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 420px) {
+  .hof h1 {
+    letter-spacing: -1.5px;
+  }
+
+  .hof p {
+    font-size: 13px;
+  }
+
+  .bio-section {
+    padding: 22px;
+  }
+
+  .trophy-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .stat-number {
+    font-size: 38px;
+  }
+
+  .golden-era {
+    padding: 24px;
+  }
+
+  .golden-era::after {
+    right: 5px;
+    font-size: 160px;
+  }
+}

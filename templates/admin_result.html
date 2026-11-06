@@ -1,37 +1,50 @@
-{% extends "base.html" %} {% block content %}
-<div class="container">
-  <h1>Manage Match Result</h1>
-
-  {% for match in matches %}
-  <div class="match-card">
-    <h2>Arsenal vs {{ match['opponent'] }}</h2>
-
-    <p>{{ match['competition'] }}</p>
-    <p>{{ match['match_datetime'] }}</p>
-
-    <p>Current result: {{ match['home_score'] }} - {{ match['away_score'] }}</p>
-
-    {% if match['result_confirmed'] %}
-    <p>Result confirmed</p>
-    {% else %}
-    <p>Result not confirmed</p>
-    {% endif %}
-
-    <form
-      action="{{ url_for('set_match_result', match_id=match['id']) }}"
-      method="post"
-    >
-      <label>Arsenal goals</label>
-      <input type="number" name="home_score" min="0" />
-
-      <label>{{ match['opponent'] }} goals</label>
-      <input type="number" name="away_score" min="0" />
-
-      <button type="submit">Save Result</button>
-    </form>
+{% extends "base.html" %} {% block title %}Admin{% endblock %} {% block content
+%} {% block styles %}
+<link
+  rel="stylesheet"
+  href="{{ url_for('static', filename='css/admin.css') }}"
+/>
+{% endblock %}
+<div class="admin-page">
+  <div class="admin-header">
+    <span class="section-label">GUNNERS MANAGEMENT</span>
+    <h1>Manage Match Results</h1>
+    <p>Update match scores and confirm official results.</p>
   </div>
-  {% else %}
-  <p>No matches found</p>
-  {% endfor %}
+
+  <div class="admin-matches">
+    {% for match in matches %}
+    <div class="admin-match-card">
+      <h2>Arsenal vs {{ match['opponent'] }}</h2>
+      <p>{{ match['competition'] }}</p>
+      <p>{{ match['match_datetime'] }}</p>
+
+      <p>
+        Current result: {{ match['home_score'] }} - {{ match['away_score'] }}
+      </p>
+
+      {% if match['result_confirmed'] %}
+      <span class="status confirmed">Result Confirmed</span>
+      {% else %}
+      <span class="status pending">Awaiting Confirmation</span>
+      {% endif %}
+
+      <form
+        action="{{ url_for('set_match_result', match_id=match['id']) }}"
+        method="POST"
+      >
+        <label>Arsenal Goals</label>
+        <input type="number" name="home_score" min="0" />
+
+        <label>{{ match['opponent'] }} Goals</label>
+        <input type="number" name="away_score" min="0" />
+
+        <button type="submit">Save Result</button>
+      </form>
+    </div>
+    {% else %}
+    <p class="admin-empty">No matches found</p>
+    {% endfor %}
+  </div>
 </div>
 {% endblock %}

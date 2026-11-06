@@ -1,6 +1,7 @@
 import sqlite3
 import os
 from dotenv import load_dotenv
+from datetime import datetime
 from flask import Flask, render_template, request, redirect, url_for, session, flash
 from werkzeug.security import check_password_hash, generate_password_hash
 
@@ -18,43 +19,8 @@ DATABASE = 'database.db'
 def get_db():
   conn = sqlite3.connect(DATABASE)
   conn.row_factory = sqlite3.Row
+  conn.execute("PRAGMA foreign_keys = ON")
   return conn
-
-
-def creat_predictions_table():
-  db = get_db()
-
-  db.execute("""
-  CREATE TABLE IF NOT EXISTS predictions (
-  id INTEGER PRIMARY KEY AUTOINCREMENT,
-  user_id INTEGER NOT NULL,
-  match_id INTEGER NOT NULL,
-  home_score INTEGER NOT NULL,
-  away_score INTEGER NOT NULL,
-  points INTEGER DEFAULT 0,
-  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-
-  FOREIGN KEY (user_id) REFERENCES users(id),
-  FOREIGN KEY (match_id) REFERENCES matches(id),
-
-  UNIQUE (user_id, match_id)
-  )
-""")
-
-  db.commit()
-  db.close()
-
-
-def creat_lineup_tables():
-  db = get_db()
-
-  db.execute("""
-    CREATE TABLE IF NOT EXISTS players (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    name TEXT UNIQUE NOT NULL,
-    shirt_number INTEGER NOT NULL,
-    position TEXT NOT NULL)
-  """)
 
 
 @app.context_processor
@@ -65,8 +31,10 @@ def inject_user():
     return {'current_user': None}
 
   conn = get_db()
-  user = conn.execute('SELECT id, username, is_admin FROM users WHERE id = ?', (user_id,)).fetchone()
-  conn.close()
+  try:
+    user = conn.execute('SELECT id, username, is_admin FROM users WHERE id = ?', (user_id,)).fetchone()
+  finally:
+    conn.close()
 
   return {'current_user': user}
 
@@ -74,15 +42,15 @@ def inject_user():
 @app.route('/register', methods=['GET', 'POST'])
 def register():
   if request.method == 'POST':
-    username = request.form.get('username')
+    username = request.form.get('username', '').strip()
     password = request.form.get('password')
     confirmation = request.form.get('confirmation')
 
     if not username or not password or not confirmation:
-      return render_template('sign_up.html', error='Please fill both field.')
+      return render_template('sign_up.html', error='Please fill in all fields.')
 
     if password != confirmation:
-      return render_template('sign_up.html', error='confirm your password correctly.')
+      return render_template('sign_up.html', error='Passwords do not match.')
     
     hash_password = generate_password_hash(password)
     conn = get_db()
@@ -90,11 +58,17 @@ def register():
     try:
       conn.execute('INSERT INTO users (username, password) VALUES (?, ?)', (username, hash_password))
       conn.commit()
-      conn.close()
-    except sqlite3.IntegrityError:
-      conn.close()
-      return render_template('sign_up.html', error='Username already taken.')
+    except sqlite3.IntegrityError as e:
+      if "user.username" in str(e):
+        return render_template('sign_up.html', error='Username already taken.')
 
+      raise
+
+    finally:
+      conn.close()
+
+    flash('Account created successfully. Please login.', 'success')
+    return redirect(url_for('login'))
     
   return render_template('sign_up.html')
 
@@ -110,8 +84,10 @@ def login():
 
     conn = get_db()
 
-    users = conn.execute('SELECT * FROM users WHERE username = ?', (username,)).fetchone()
-    conn.close()
+    try:
+      users = conn.execute('SELECT * FROM users WHERE username = ?', (username,)).fetchone()
+    finally:
+      conn.close()
 
     if users is None or not check_password_hash(users['password'], password):
       return render_template('login.html', error='Username or password is incorrect.')
@@ -136,10 +112,11 @@ def logout():
 @app.route('/')
 def index():
   conn = get_db()
-
-  next_match = conn.execute('SELECT * FROM matches WHERE match_datetime > CURRENT_TIMESTAMP ORDER BY match_datetime ASC LIMIT 1').fetchone()
-
-  conn.close()
+  try:
+    next_match = conn.execute('SELECT * FROM matches WHERE match_datetime > CURRENT_TIMESTAMP ORDER BY match_datetime ASC LIMIT 1').fetchone()
+  finally:
+    conn.close()
+    
   return render_template('index.html', next_match=next_match)
 
 
@@ -170,29 +147,34 @@ def predictions():
   if "user_id" not in session:
     return redirect("/login")
 
-  db = get_db()
-
   if request.method == "POST":
     match_id = request.form.get("match_id", type=int)
     home_score = request.form.get("home_score", type=int)
     away_score = request.form.get("away_score", type=int)
 
     if match_id is None or home_score is None or away_score is None:
-      flash("Please Enter a valid predictions")
+      flash("Please Enter valid predictions")
       return redirect("/predictions")
 
     if home_score < 0 or away_score < 0:
-      flash("Scores cannot be negetive")
+      flash("Scores cannot be negative")
       return redirect("/predictions")
 
-    match = db.execute("SELECT id FROM matches WHERE id = ?", (match_id,)).fetchone()
-
-    if match is None:
-      db.close()
-      flash("Match not found")
-      return redirect("/predictions")
+    db = get_db()
 
     try:
+      match = db.execute("SELECT id, match_datetime, result_confirmed FROM matches WHERE id = ?", (match_id,)).fetchone()
+
+      if match is None:
+        flash("Match not found")
+        return redirect("/predictions")
+
+      match_time = datetime.fromisoformat(match["match_datetime"].strip())
+
+      if match["result_confirmed"] or match_time <= datetime.now():
+        flash("Predictions are closed for this match")
+        return redirect(url_for("predictions"))
+
       db.execute("""
         INSERT INTO predictions
         (user_id, match_id, home_score, away_score)
@@ -200,12 +182,13 @@ def predictions():
         ON CONFLICT(user_id, match_id) DO UPDATE SET
           home_score = excluded.home_score,
           away_score = excluded.away_score
-      """, (
-        session["user_id"],
-        match_id,
-        home_score,
-        away_score
-      ))
+        """, (
+          session["user_id"],
+          match_id,
+          home_score,
+          away_score
+        ))
+
       db.commit()
       flash("Prediction saved successfully!")
     finally:
@@ -213,7 +196,10 @@ def predictions():
 
     return redirect("/predictions")
 
-  matches = db.execute("""
+  db = get_db()
+
+  try:
+    matches = db.execute("""
         SELECT matches.*,
         predictions.home_score AS predicted_home,
         predictions.away_score AS predicted_away
@@ -221,31 +207,52 @@ def predictions():
         AND predictions.user_id = ? ORDER BY matches.match_datetime DESC
       """, (session["user_id"],)).fetchall()
 
-  db.close()
+  finally:
+    db.close()
+
+  matches = [dict(match) for match in matches]
+
+  for match in matches:
+    match["display_datetime"] = datetime.fromisoformat(
+      match["match_datetime"].strip()
+    ).strftime("%d %B %Y . %H:%M")
+
 
   return render_template("predictions.html", matches=matches)
 
 
 @app.route('/admin/match/<int:match_id>/result', methods=['POST'])
 def set_match_result(match_id):
-  if not session.get('is_admin', False):
-    flash("Admin access required")
-    return redirect(url_for('index'))
+  if "user_id" not in session:
+    flash("Please login first")
+    return redirect(url_for("login"))
 
   db = get_db()
+
+  try:
+    user = db.execute("SELECT is_admin FROM users WHERE id = ?", (session["user_id"],)).fetchone()
+
+    if user is None or not user["is_admin"]:
+      session.pop("is_admin", None)
+      flash("Admin access required")
+      return redirect(url_for("index"))
+
+  finally:
+    db.close()
+
+  db = get_db()
+
   try:
     home_score = request.form.get("home_score", type=int)
     away_score = request.form.get("away_score", type=int)
 
     if (home_score is None or away_score is None or home_score < 0 or away_score < 0):
-      db.close()
       flash("Invalid match result")
       return redirect(url_for('index'))
 
     match = db.execute("SELECT id FROM matches WHERE id = ?", (match_id,)).fetchone()
 
     if match is None:
-      db.close()
       flash("Match not found")
       return redirect(url_for('index'))
 
@@ -266,7 +273,7 @@ def set_match_result(match_id):
         away_score
       )
 
-    db.execute("UPDATE predictions SET points = ? WHERE id = ?", (points, prediction["id"]))
+      db.execute("UPDATE predictions SET points = ? WHERE id = ?", (points, prediction["id"]))
 
     db.commit()
     flash("Match result saved and points calculated")
@@ -279,20 +286,28 @@ def set_match_result(match_id):
 
 @app.route('/admin/results', methods=['GET'])
 def admin_results():
-  if not session.get('is_admin', False):
-    flash("Admin access required")
-    return redirect(url_for('index'))
+  if "user_id" not in session:
+    flash("Please login first")
+    return redirect(url_for("login"))
 
   db = get_db()
 
-  matches = db.execute("""
-      SELECT id, opponent, match_datetime, competition,
-             home_score, away_score, result_confirmed
-      FROM matches
-      ORDER BY match_datetime DESC
-  """).fetchall()
+  try:
+    user = db.execute("SELECT is_admin FROM users WHERE id = ?", (session["user_id"],)).fetchone()
 
-  db.close()
+    if user is None or not user["is_admin"]:
+      session.pop("is_admin", None)
+      flash("Admin access required")
+      return redirect(url_for("index"))
+
+    matches = db.execute("""
+        SELECT id, opponent, match_datetime, competition,
+              home_score, away_score, result_confirmed
+        FROM matches
+        ORDER BY match_datetime DESC
+    """).fetchall()
+  finally:
+    db.close()
 
   return render_template('admin_result.html', matches=matches)
 
@@ -301,16 +316,17 @@ def admin_results():
 def leaderboard():
   db = get_db()
 
-  users = db.execute("""
+  try:
+    users = db.execute("""
       SELECT users.username,
       COALESCE(SUM(predictions.points), 0) AS total_points
       FROM users
       LEFT JOIN predictions ON users.id = predictions.user_id
       GROUP BY users.id
       ORDER BY total_points DESC, users.username ASC
-  """).fetchall()
-
-  db.close()
+    """).fetchall()
+  finally:
+    db.close()
 
   return render_template('leaderboard.html', users=users)
 
@@ -328,6 +344,13 @@ FORMATIONS = {
     ("LW", "FWD"), ("ST", "FWD"), ("RW", "FWD")
   ],
 
+  "4-4-2": [
+    ("GK", "GK"),
+    ("LB", "DEF"), ("CB1", "DEF"), ("CB2", "DEF"), ("RB", "DEF"),
+    ("LM", "MID"), ("CM1", "MID"), ("CM2", "MID"), ("RM", "MID"),
+    ("ST1", "FWD"), ("ST2", "FWD")
+  ],
+
   "4-2-3-1": [
     ("GK", "GK"),
     ("LB", "DEF"), ("CB1", "DEF"), ("CB2", "DEF"), ("RB", "DEF"),
@@ -341,7 +364,7 @@ FORMATIONS = {
     ("LB", "DEF"), ("CB1", "DEF"), ("CB2", "DEF"), ("RB", "DEF"),
     ("CM1", "MID"), ("CM2", "MID"), ("CM3", "MID"),
     ("CAM", "MID"),
-    ("ST", "FWD"), ("ST2", "FWD")
+    ("ST1", "FWD"), ("ST2", "FWD")
   ],
 
   "4-1-4-1": [
@@ -378,13 +401,13 @@ FORMATIONS = {
     ("GK", "GK"),
     ("CB1", "DEF"), ("CB2", "DEF"), ("CB3", "DEF"),
     ("LM", "MID"), ("CM1", "MID"), ("CM2", "MID"), ("RM", "MID"),
-    ("AM", "MID"), ("AM", "MID"),
+    ("AM1", "MID"), ("AM2", "MID"),
     ("ST", "FWD")
   ],
 
   "5-3-2": [
     ("GK", "GK"),
-    ("LWB", "DEF"), ("CB1", "DEF"), ("CB2", "DEF"), ("RWB", "DEF"),
+    ("LWB", "DEF"), ("CB1", "DEF"), ("CB3", "DEF"),("CB2", "DEF"), ("RWB", "DEF"),
     ("CM1", "MID"), ("CM2", "MID"), ("CM3", "MID"),
     ("ST1", "FWD"), ("ST2", "FWD")
   ]
@@ -393,33 +416,32 @@ FORMATIONS = {
 
 @app.route('/team')
 def team():
-  if "user_id" not in session:
-    return redirect("/login")
+  db = get_db()
 
-  db= get_db()
-
-  players = db.execute("""
-    SELECT id, name, shirt_number, positions FROM players
-    ORDER BY shirt_number
-  """).fetchall()
-
-  players = [dict(player) for player in players]
-
-  lineup = db.execute("""
-    SELECT id, formation FROM lineups WHERE user_id = ?
-  """, (session["user_id"],)). fetchone()
-
+  players = []
+  lineup = None
   lineup_players = []
 
-  if lineup:
-    lineup_players = db.execute("""
-      SELECT slot, player_id FROM lineup_players WHERE lineup_id = ?
-    """, (lineup["id"],)).fetchall()
+  try:
+    if "user_id" in session:
+      players = db.execute("""
+          SELECT id, name, shirt_number, positions FROM players ORDER BY shirt_number
+      """).fetchall()
 
-    lineup_players = [dict(player) for player in lineup_players]
+      players = [dict(player) for player in players]
 
-  db.close()
+      lineup = db.execute("""
+          SELECT id, formation FROM lineups WHERE user_id = ?
+      """, (session["user_id"],)).fetchone()
 
+      if lineup:
+        lineup_players = db.execute("""
+            SELECT slot, player_id FROM lineup_players WHERE lineup_id = ?
+        """, (lineup["id"],)).fetchall()
+
+        lineup_players = [dict(player) for player in lineup_players]
+  finally:
+    db.close()
 
   return render_template('current_team.html', players=players, formations=FORMATIONS, lineup=lineup, lineup_players=lineup_players)
 
@@ -431,17 +453,21 @@ def save_lineup():
 
   data = request.get_json()
 
-  if not data:
+  if not isinstance(data, dict):
     return {"success":False, "message": "Invalid data"}, 400
 
   formation = data.get("formation")
   selected_players = data.get("players")
 
-  if formation not in FORMATIONS:
-    return {"success":False, "message": "Invalid formation"}, 400
+  if not isinstance(formation, str) or formation not in FORMATIONS:
+    return {"success": False, "message": "Invalid formation"}, 400
 
   if not isinstance(selected_players, dict) or len(selected_players) != 11:
     return {"success": False, "message": "You must select 11 players"}, 400
+
+  if not all(isinstance(player_id, int) and not isinstance(player_id, bool)
+             and player_id > 0 for player_id in selected_players.values()):
+    return {"success": False, "message": "Invalid player IDs"}, 400
 
   if len(set(selected_players.values())) != 11:
     return {"success": False, "message": "A player cannot be selected twice"}, 400
@@ -453,10 +479,10 @@ def save_lineup():
       for slot, positions in FORMATIONS[formation]
     }
 
-    for slot, player_id in selected_players.items():
-      if slot not in formation_slots:
-        return {"success": False, "message": "Invalid slot"}, 400
+    if set(selected_players.keys()) != set(formation_slots.keys()):
+      return {"success":False, "message": "Invalid lineup slots"}, 400
 
+    for slot, player_id in selected_players.items():
       player = db.execute("""
           SELECT id, positions FROM players WHERE id = ?
       """, (player_id,)).fetchone()
@@ -509,5 +535,4 @@ def save_lineup():
 
 
 if __name__ == '__main__':
-  creat_predictions_table()
   app.run(debug=True)

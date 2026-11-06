@@ -1,141 +1,144 @@
 {% extends "base.html" %} {% block title %}Hall of Fame{% endblock %} {% block
-content %}
-<header class="hof">
-  <h1>Hall of Fame</h1>
-  <p>
-    Welcome to the Hall of Fame! Here, we celebrate the legendary players who
-    have made a significant impact on Arsenal FC's history.
-  </p>
-</header>
-<div class="hof-container">
-  <div class="bio-section">
-    <h2>Club History</h2>
+content %} {% block styles %}
+<link
+  rel="stylesheet"
+  href="{{ url_for('static', filename='css/hall.css') }}"
+/>
+{% endblock %}
+<div class="hall-page">
+  <header class="hof">
+    <h1>Hall of Fame</h1>
     <p>
-      Arsenal Football Club was founded in 1886 by workers at the Royal Arsenal
-      munitions factory in Woolwich, South London. Originally named Dial Square,
-      it became Woolwich Arsenal and, in 1893, was the first southern club to
-      join the Football League. Financial struggles and poor crowds led to a
-      pivotal change in 1913, when the club moved to Highbury in North London
-      and soon dropped “Woolwich” from its name.
+      Welcome to the Hall of Fame! Here, we celebrate the legendary players who
+      have made a significant impact on Arsenal FC's history.
     </p>
-    <p>
-      In 1925, Arsenal hired visionary manager Herbert Chapman, who transformed
-      the club with new tactics, numbered shirts, and the iconic white sleeves.
-      Under Chapman and his successors, Arsenal became a dominant force in the
-      1930s, winning multiple league titles and FA Cups. A league and FA Cup
-      double followed in 1971 under Bertie Mee, re-establishing Arsenal as one
-      of England’s top clubs.
-    </p>
-    <p>
-      The modern era was defined by Arsène Wenger, who arrived in 1996 and
-      revolutionized English football with new approaches to fitness, diet, and
-      scouting. He led the club to three Premier League titles, including the
-      unbeaten “Invincibles” season of 2003–04, and won a record seven FA Cups.
-      In 2006, Arsenal moved from Highbury to the Emirates Stadium to secure its
-      financial future.
-    </p>
-    <p>
-      After a transitional period following Wenger’s departure in 2018, Mikel
-      Arteta has rebuilt the team around young talent and a clear tactical
-      identity. Arsenal remains one of England’s most successful clubs, with 13
-      league titles and a record 14 FA Cups, known for its stylish football and
-      rich history.
-    </p>
-  </div>
-  <div class="stats-grid">
-    <div class="stat-card">
-      <span class="stat-number">13</span>
-      <span class="stat-label">Premier League</span>
+  </header>
+  <div class="hof-container">
+    <div class="bio-section">
+      <h2>Club History</h2>
+      <p>
+        Arsenal Football Club was founded in 1886 by workers at the Royal
+        Arsenal munitions factory in Woolwich, South London. Originally named
+        Dial Square, it became Woolwich Arsenal and, in 1893, was the first
+        southern club to join the Football League. Financial struggles and poor
+        crowds led to a pivotal change in 1913, when the club moved to Highbury
+        in North London and soon dropped “Woolwich” from its name.
+      </p>
+      <p>
+        In 1925, Arsenal hired visionary manager Herbert Chapman, who
+        transformed the club with new tactics, numbered shirts, and the iconic
+        white sleeves. Under Chapman and his successors, Arsenal became a
+        dominant force in the 1930s, winning multiple league titles and FA Cups.
+        A league and FA Cup double followed in 1971 under Bertie Mee,
+        re-establishing Arsenal as one of England’s top clubs.
+      </p>
+      <p>
+        The modern era was defined by Arsène Wenger, who arrived in 1996 and
+        revolutionized English football with new approaches to fitness, diet,
+        and scouting. He led the club to three Premier League titles, including
+        the unbeaten “Invincibles” season of 2003–04, and won a record seven FA
+        Cups. In 2006, Arsenal moved from Highbury to the Emirates Stadium to
+        secure its financial future.
+      </p>
+      <p>
+        After a transitional period following Wenger’s departure in 2018, Mikel
+        Arteta has rebuilt the team around young talent and a clear tactical
+        identity. Arsenal remains one of England’s most successful clubs, with
+        13 league titles and a record 14 FA Cups, known for its stylish football
+        and rich history.
+      </p>
     </div>
-    <div class="stat-card">
-      <span class="stat-number">14</span>
-      <span class="stat-label">FA Cup</span>
-    </div>
-    <div class="stat-card">
-      <span class="stat-number">17</span>
-      <span class="stat-label">Community Shield</span>
-    </div>
-    <div class="stat-card">
-      <span class="stat-number">2</span>
-      <span class="stat-label">League Cup</span>
-    </div>
-  </div>
-  <div class="trophies-section">
-    <h2>Trophies</h2>
-    <div class="trophy-grid">
-      <div class="trophy-item">
-        <span class="trophy-icon">🏆</span>
-        <div class="trophy-name">Premier League</div>
-        <div class="trophy-count">13</div>
+    <div class="stats-grid">
+      <div class="stat-card">
+        <span class="stat-number">13</span>
+        <span class="stat-label">Premier League</span>
       </div>
-      <div class="trophy-item">
-        <span class="trophy-icon">🏆</span>
-        <div class="trophy-name">FA Cup</div>
-        <div class="trophy-count">14</div>
+      <div class="stat-card">
+        <span class="stat-number">14</span>
+        <span class="stat-label">FA Cup</span>
       </div>
-      <div class="trophy-item">
-        <span class="trophy-icon">🏆</span>
-        <div class="trophy-name">Community Shield</div>
-        <div class="trophy-count">17</div>
+      <div class="stat-card">
+        <span class="stat-number">17</span>
+        <span class="stat-label">Community Shield</span>
       </div>
-      <div class="trophy-item">
-        <span class="trophy-icon">🏆</span>
-        <div class="trophy-name">League Cup</div>
-        <div class="trophy-count">2</div>
-      </div>
-      <div class="trophy-item">
-        <span class="trophy-icon">🏆</span>
-        <div class="trophy-name">European Cup Winners’ Cup</div>
-        <div class="trophy-count">1 (1993-70)</div>
-      </div>
-      <div class="trophy-item">
-        <span class="trophy-icon">🏆</span>
-        <div class="trophy-name">Inter-Cities Fairs Cup</div>
-        <div class="trophy-count">1 (1969-70)</div>
+      <div class="stat-card">
+        <span class="stat-number">2</span>
+        <span class="stat-label">League Cup</span>
       </div>
     </div>
-  </div>
-  <div class="golden-era">
-    <h2>Golden Era: The Invincible Team</h2>
-    <p>
-      The 2003-04 season was undoubtedly one of the most brilliant periods in
-      Arsenal's history. Under Arsene Wenger, the Gunners managed to finish the
-      entire Premier League season unbeaten, earning them the nickname "The
-      Invincibles".
-    </p>
-    <p>
-      With players such as Thierry Henry, Dennis Bergkamp, ​​Patrick Vieira,
-      Robert Pearce and Ashley Cole, the team won 26 and drew 12, winning the
-      Premier League with 90 points.
-    </p>
-    <span>49 consecutive games without defeat (Premier League record)</span>
-  </div>
-  <div class="records-section">
-    <h2></h2>
-    <div class="records-grid">
-      <div class="record-item">
-        <span class="record-name">Most games played</span>
-        <span class="record-value">David O'leary (722)</span>
+    <div class="trophies-section">
+      <h2>Trophies</h2>
+      <div class="trophy-grid">
+        <div class="trophy-item">
+          <span class="trophy-icon">🏆</span>
+          <div class="trophy-name">Premier League</div>
+          <div class="trophy-count">13</div>
+        </div>
+        <div class="trophy-item">
+          <span class="trophy-icon">🏆</span>
+          <div class="trophy-name">FA Cup</div>
+          <div class="trophy-count">14</div>
+        </div>
+        <div class="trophy-item">
+          <span class="trophy-icon">🏆</span>
+          <div class="trophy-name">Community Shield</div>
+          <div class="trophy-count">17</div>
+        </div>
+        <div class="trophy-item">
+          <span class="trophy-icon">🏆</span>
+          <div class="trophy-name">League Cup</div>
+          <div class="trophy-count">2</div>
+        </div>
+        <div class="trophy-item">
+          <span class="trophy-icon">🏆</span>
+          <div class="trophy-name">European Cup Winners’ Cup</div>
+          <div class="trophy-count">1 (1993-70)</div>
+        </div>
+        <div class="trophy-item">
+          <span class="trophy-icon">🏆</span>
+          <div class="trophy-name">Inter-Cities Fairs Cup</div>
+          <div class="trophy-count">1 (1969-70)</div>
+        </div>
       </div>
-      <div class="record-item">
-        <span class="record-name">Most goals scored</span>
-        <span class="record-value">Thierry Henry (228)</span>
-      </div>
-      <div class="record-item">
-        <span class="record-name">Most assists</span>
-        <span class="record-value">Dennis Bergkamp (94)</span>
-      </div>
-      <div class="record-item">
-        <span class="record-name">Most clean sheets</span>
-        <span class="record-value">David Seaman (137)</span>
-      </div>
-      <div class="record-item">
-        <span class="record-name">Biggest win</span>
-        <span class="record-value">fefssdad</span>
-      </div>
-      <div class="record-item">
-        <span class="record-name">Biggest win</span>
-        <span class="record-value">May 11, 2005. Arsenal 7-0 Everton.</span>
+    </div>
+    <div class="golden-era">
+      <h2>Golden Era: The Invincible Team</h2>
+      <p>
+        The 2003-04 season was undoubtedly one of the most brilliant periods in
+        Arsenal's history. Under Arsene Wenger, the Gunners managed to finish
+        the entire Premier League season unbeaten, earning them the nickname
+        "The Invincibles".
+      </p>
+      <p>
+        With players such as Thierry Henry, Dennis Bergkamp, ​​Patrick Vieira,
+        Robert Pearce and Ashley Cole, the team won 26 and drew 12, winning the
+        Premier League with 90 points.
+      </p>
+      <span>49 consecutive games without defeat (Premier League record)</span>
+    </div>
+    <div class="records-section">
+      <h2>Club Records</h2>
+      <div class="records-grid">
+        <div class="record-item">
+          <span class="record-name">Most games played</span>
+          <span class="record-value">David O'leary (722)</span>
+        </div>
+        <div class="record-item">
+          <span class="record-name">Most goals scored</span>
+          <span class="record-value">Thierry Henry (228)</span>
+        </div>
+        <div class="record-item">
+          <span class="record-name">Most assists</span>
+          <span class="record-value">Dennis Bergkamp (94)</span>
+        </div>
+        <div class="record-item">
+          <span class="record-name">Most clean sheets</span>
+          <span class="record-value">David Seaman (137)</span>
+        </div>
+        <div class="record-item">
+          <span class="record-name">Biggest win</span>
+          <span class="record-value">May 11, 2005. Arsenal 7-0 Everton.</span>
+        </div>
       </div>
     </div>
   </div>

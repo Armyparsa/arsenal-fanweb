@@ -1,15 +1,36 @@
 {% extends "base.html" %} {% block title %}LeaderBoard{% endblock %} {% block
-content %}
-<div class="container">
-  <h1>Leaderboard</h1>
-
-  {% for user in users %}
-  <div class="leaderboard-row">
-    <span>{{ loop.index }}. {{ user['username'] }}</span>
-    <span>{{ user['total_points'] }} points</span>
+content %} {% block styles %}
+<link
+  rel="stylesheet"
+  href="{{ url_for('static', filename='css/leaderboard.css') }}"
+/>
+{% endblock %}
+<div class="leaderboard-page">
+  <div class="leaderboard-header">
+    <span class="section-label">GUNNERS COMMUNITY</span>
+    <h1>Leaderboard</h1>
+    <p>Compete with other fans and climb to the top.</p>
   </div>
-  {% else %}
-  <p>No users found</p>
-  {% endfor %}
+
+  <div class="leaderboard-container">
+    <div class="leaderboard-table-header">
+      <span>RANK</span>
+      <span>PLAYER</span>
+      <span>POINTS</span>
+    </div>
+
+    {% for user in users %}
+    <div class="leaderboard-row rank-{{ loop.index }}">
+      <span class="player-rank">{{ loop.index }}</span>
+      <span class="player-name">{{ user['username'] }}</span>
+      <span class="player-points"
+        >{{ user['total_points'] }}
+        <span>PTS</span>
+      </span>
+    </div>
+    {% else %}
+    <p class="no-users">No users found</p>
+    {% endfor %}
+  </div>
 </div>
 {% endblock %}

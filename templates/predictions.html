@@ -1,40 +1,61 @@
 {% extends "base.html" %} {% block title %}Predictions{% endblock %} {% block
-content %}
+content %} {% block styles %}
+<link
+  rel="stylesheet"
+  href="{{ url_for('static', filename='css/predictions.css') }}"
+/>
+{% endblock %}
 <div class="predictions-page">
-  <h1>Predict Match Results</h1>
-  <p>Predict the score and earn points!</p>
-
-  {% for match in matches %}
-  <div class="prediction-card">
-    <h2>Arsenal vs {{ match["opponent"] }}</h2>
-    <p>{{ match["competition"] }}</p>
-    <p>{{ match["match_datetime"] }}</p>
-
-    <form action="{{ url_for('predictions') }}" method="POST">
-      <input type="hidden" name="match_id" value="{{ match['id'] }}" />
-
-      <label>Arsenal Score</label>
-      <input
-        type="number"
-        name="home_score"
-        min="0"
-        value="{{ match['predicted_home'] if match['predicted_home'] is not none else '' }}"
-      />
-
-      <label>Opponent Score</label>
-      <input
-        type="number"
-        name="away_score"
-        min="0"
-        value="{{ match['predicted_away'] if match['predicted_away'] is not none else '' }}"
-      />
-
-      <button type="submit">Save Prediction</button>
-    </form>
+  <div class="predictions-header">
+    <span class="section-label">GUNNERS COMMUNITY</span>
+    <h1>Match Predictions</h1>
+    <p>Predict the score. Support the team. Earn points.</p>
   </div>
-  {% else %}
-  <p>No matches available</p>
-  {% endfor %}
+
+  <div class="predictions-grid">
+    {% for match in matches%}
+    <div class="predictions-card">
+      <div class="match-heading">
+        <span class="match-label">UPCOMING MATCH</span>
+        <h2>Arsenal <span>vs</span> {{ match["opponent"] }}</h2>
+        <p class="match-competition">{{ match["competition"] }}</p>
+        <p class="match-date">{{ match["display_datetime"] }}</p>
+      </div>
+
+      <form action="{{ url_for('predictions') }}" method="post">
+        <input type="hidden" name="match_id" value="{{ match['id'] }}" />
+
+        <div class="score-inputs">
+          <div class="score-field">
+            <label>Arsenal</label>
+            <input
+              type="number"
+              name="home_score"
+              min="0"
+              value="{{ match['predicted_home'] if match['predicted_home'] is not none else '' }}"
+            />
+          </div>
+
+          <span class="score-separator">:</span>
+
+          <div class="score-field">
+            <label>{{ match["opponent"] }}</label>
+            <input
+              type="number"
+              name="away_score"
+              min="0"
+              value="{{ match['predicted_away'] if match['predicted_away'] is not none else '' }}"
+            />
+          </div>
+        </div>
+
+        <button type="submit" class="save-prediction">Save Prediction</button>
+      </form>
+    </div>
+    {% else %}
+    <p class="no-matches">No matches available</p>
+    {% endfor %}
+  </div>
 </div>
 
 {% endblock %}

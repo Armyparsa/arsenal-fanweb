@@ -1,5 +1,13 @@
 {% extends "base.html" %} {% block title %}Current Team{% endblock %} {% block
 content %}
+
+{% block syles %}
+<link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='css/team.css') }}"
+    />
+{% endblock %}
+
 <header class="ct">
   <h1>Current Team</h1>
   <p></p>
@@ -18,49 +26,49 @@ content %}
   <div class="substitutes">
     <h3>Team Substitutions</h3>
     <div class="sub-grid">
-      <div calss="sub-item">
+      <div class="sub-item">
         <span class="sub-number">13</span>
         <div class="sub-info">
           <div class="sub-name">Arrizabalaga</div>
           <div class="sub-pos">Goalkeeper</div>
         </div>
       </div>
-      <div calss="sub-item">
+      <div class="sub-item">
         <span class="sub-number">5</span>
         <div class="sub-info">
           <div class="sub-name">Hincapie</div>
           <div class="sub-pos">Defender</div>
         </div>
       </div>
-      <div calss="sub-item">
+      <div class="sub-item">
         <span class="sub-number">15</span>
         <div class="sub-info">
           <div class="sub-name">Mosquera</div>
           <div class="sub-pos">Defender</div>
         </div>
       </div>
-      <div calss="sub-item">
+      <div class="sub-item">
         <span class="sub-number">23</span>
         <div class="sub-info">
           <div class="sub-name">Merino</div>
           <div class="sub-pos">Midfielder</div>
         </div>
       </div>
-      <div calss="sub-item">
+      <div class="sub-item">
         <span class="sub-number">36</span>
         <div class="sub-info">
           <div class="sub-name">Zubimendi</div>
           <div class="sub-pos">Midfielder</div>
         </div>
       </div>
-      <div calss="sub-item">
+      <div class="sub-item">
         <span class="sub-number">14</span>
         <div class="sub-info">
           <div class="sub-name">Gyokeres</div>
           <div class="sub-pos">Attacker</div>
         </div>
       </div>
-      <div calss="sub-item">
+      <div class="sub-item">
         <span class="sub-number">20</span>
         <div class="sub-info">
           <div class="sub-name">madueke</div>
@@ -71,7 +79,7 @@ content %}
   </div>
   <div class="team-staff">
     <h3>Coaching Staff</h3>
-    <div calss="staff-grid">
+    <div class="staff-grid">
       <div class="staff-item">
         <span class="staff-avatar"></span>
         <div class="staff-name">Mikel Arteta</div>
@@ -100,6 +108,8 @@ content %}
     </div>
   </div>
 </div>
+
+{% if current_user %}
 <div class="container2">
   <div class="lineup-builder">
     <h2>Build Your Arsenal XI</h2>
@@ -121,9 +131,39 @@ content %}
       <div class="pitch-slots" id="pitch-slots"></div>
     </div>
 
+    <div class="player-picker" id="player-picker" hidden>
+      <div class="picker-header">
+        <h3 class="picker-title">Choose Player</h3>
+        <button type="button" id="close-picker">&times;</button>
+      </div>
+
+      <div class="picker-players" id="picker-players"></div>
+    </div>
+
     <button type="button" id="save-lineup">Save Line-up</button>
   </div>
-  <div class="transfer-news">
+</div>
+
+<div
+  id="lineup-data"
+  data-formations="{{ formations | tojson | forceescape }}"
+  data-players="{{ players | tojson | forceescape }}"
+  data-saved-players="{{ lineup_players | tojson | forceescape }}"
+></div>
+
+{% else %}
+<div class="container2">
+  <div class="login-required">
+  <h2>Build Your Arsenal XI</h2>
+  <p>Please login to create and save your own lineup.</p>
+  <a href="{{ url_for('login') }}">Login</a>
+  <a href="{{ url_for('register') }}">Sign Up</a>
+</div>
+</div>
+{% endif %}
+
+<div class="container2">
+    <div class="transfer-news">
     <h3>Latest transfer news</h3>
     <div class="transfer-grid">
       <div class="transfer-item">
@@ -187,13 +227,7 @@ content %}
     </div>
   </div>
 </div>
-
-<div
-  id="lineup-data"
-  data-formations="{{ formations | tojson | forceescape }}"
-  data-players="{{ players | tojson | forceescape }}"
-  data-saved-players="{{ lineup_players | tojson | forceescape }}"
-></div>
-
+{% endblock %}
+{% block scripts %}
 <script src="{{ url_for('static', filename='js/lineup.js') }}"></script>
 {% endblock %}
