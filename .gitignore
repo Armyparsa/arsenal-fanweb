@@ -8,3 +8,4 @@ database.db
 .vscode/
 schema.sql
 -- SQLite.sql
+database_backup_before_changes.db.db
