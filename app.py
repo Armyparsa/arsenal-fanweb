@@ -5,7 +5,8 @@ from datetime import datetime
 from flask import Flask, render_template, request, redirect, url_for, session, flash
 from werkzeug.security import check_password_hash, generate_password_hash
 
-load_dotenv()
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+load_dotenv(os.path.join(BASE_DIR, ".env"))
 
 app = Flask (__name__)
 app.secret_key = os.getenv("SECRET_KEY")
@@ -13,7 +14,7 @@ app.secret_key = os.getenv("SECRET_KEY")
 if not app.secret_key:
   raise RuntimeError("SECRET_KEY is not set")
 
-DATABASE = 'database.db'
+DATABASE = os.path.join(BASE_DIR, "database.db")
 
 
 def get_db():
@@ -204,7 +205,11 @@ def predictions():
         predictions.home_score AS predicted_home,
         predictions.away_score AS predicted_away
         FROM matches LEFT JOIN predictions ON matches.id = predictions.match_id
-        AND predictions.user_id = ? ORDER BY matches.match_datetime DESC
+        AND predictions.user_id = ? ORDER BY WHEN matches.match_datetime > CURRENT_TIMESTAMP
+        AND matches.result_confirmed = 0 THEN 0
+        ELSE 1
+        END,
+        matches.match_datetime ASC
       """, (session["user_id"],)).fetchall()
 
   finally:
@@ -213,9 +218,11 @@ def predictions():
   matches = [dict(match) for match in matches]
 
   for match in matches:
-    match["display_datetime"] = datetime.fromisoformat(
-      match["match_datetime"].strip()
-    ).strftime("%d %B %Y . %H:%M")
+    match_datetime = datetime.fromisoformat(match["match_datetime"].strip())
+    match["display_datetime"] = match_datetime.strftime("%d %B %Y . %H:%M")
+    match["prediction_open"] = (
+      not match["result_confirmed"] and match_datetime > datetime.now()
+    )
 
 
   return render_template("predictions.html", matches=matches)
