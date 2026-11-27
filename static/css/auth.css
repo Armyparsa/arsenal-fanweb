@@ -1,0 +1,144 @@
+.auth-page {
+  min-height: calc(100vh - 80px);
+  padding: 65px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background:
+    radial-gradient(
+      ellipse at 50% 0%,
+      rgba(158, 16, 40, 0.22),
+      transparent 60px
+    ),
+    #111318;
+}
+
+.login-page,
+.register-page {
+  width: 100%;
+  max-width: 460px;
+  padding: 45px;
+  background: linear-gradient(145deg, #20232b, #191b22);
+  border: 1px solid rgba(216, 184, 121, 0.16);
+  border-radius: 20px;
+  box-shadow: 0 25px 70px rgba(0, 0, 0, 0.35);
+}
+
+.login-page h1,
+.register-page h1 {
+  margin: 0;
+  color: #f4f1eb;
+  font-size: 34px;
+  font-weight: 900;
+  letter-spacing: -1px;
+}
+
+.login-page > p,
+.register-page > p {
+  margin: 12px 0 30px;
+  color: #b9bdc7;
+  font-size: 14px;
+  line-height: 1.7;
+}
+
+.login-field,
+.register-field {
+  margin-bottom: 22px;
+}
+
+.login-field label,
+.register-field label {
+  display: block;
+  margin-bottom: 9px;
+  color: #d8d9df;
+  font-size: 13px;
+  font-weight: 750;
+}
+
+.login-field input,
+.register-field input {
+  width: 100%;
+  height: 50px;
+  padding: 0 15px;
+  color: #f4f1eb;
+  background: #111318;
+  border: 1px solid #343741;
+  border-radius: 9px;
+  outline: none;
+  font-size: 14px;
+  transition: 200ms ease;
+}
+
+.login-field input:focus,
+.register-field input:focus {
+  border-color: #d8b879;
+  box-shadow: 0 0 0 3px rgba(216, 184, 121, 0.1);
+}
+
+.login-page form button,
+.register-page form button {
+  width: 100%;
+  height: 50px;
+  margin-top: 8px;
+  color: #ffffff;
+  background: #9e1028;
+  border: none;
+  border-radius: 9px;
+  font-size: 14px;
+  font-weight: 850;
+  cursor: pointer;
+  transition: 200ms ease;
+}
+
+.login-page form button:hover,
+.register-page form button:hover {
+  background: #bd1735;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 22px rgba(158, 16, 40, 0.25);
+}
+
+.login-page > p:last-child,
+.login-page > p:last-child {
+  margin: 25px 0 0;
+  text-align: center;
+  font-size: 13px;
+}
+
+.login-page a,
+.register-page a {
+  color: #d8b879;
+  font-weight: 800;
+  text-decoration: none;
+  transition: 200ms ease;
+}
+
+.login-page a:hover,
+.register-page a:hover {
+  color: #f4f1eb;
+}
+
+.login-error,
+.register-error {
+  padding: 12px 15px;
+  color: #ff9aa9 !important;
+  background: rgba(158, 16, 40, 0.13);
+  border: 1px solid rgba(158, 16, 40, 0.35);
+  border-radius: 8px;
+  font-size: 13px !important;
+}
+
+@media (max-width: 480px) {
+  .auth-page {
+    padding: 40px 16px;
+  }
+
+  .login-page,
+  .register-page {
+    padding: 32px 24px;
+  }
+
+  .login-page h1,
+  .register-page h1 {
+    font-size: 29px;
+  }
+}

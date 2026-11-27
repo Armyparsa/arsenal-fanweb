@@ -1,30 +1,33 @@
-alert("dnisfheoc");
+const matchDataElement = document.getElementById("match-data");
 
-const matchData = document.getElementById("match-data");
+if (matchDataElement) {
+  const matchDataText = matchDataElement.dataset.matchData;
 
-if (matchData) {
-  const matchDataText = matchData.dataset.matchData;
+  const daysElement = document.getElementById("days");
+  const hoursElement = document.getElementById("hours");
+  const minutesElement = document.getElementById("minutes");
+  const secondsElement = document.getElementById("seconds");
 
-  if (matchDataText) {
+  if (
+    matchDataText &&
+    daysElement &&
+    hoursElement &&
+    minutesElement &&
+    secondsElement
+  ) {
     const matchData = new Date(matchDataText.replace(" ", "T"));
-    console.log("Match date text:", matchDataText);
-    console.log("Parsed match date:", matchData);
-    console.log("Current date:", new Date());
-    alert("Match date: " + matchDataText + "\nParsed date: " + matchData);
 
-    const daysElement = document.getElementById("days");
-    const hoursElement = document.getElementById("hours");
-    const minutesElement = document.getElementById("minutes");
-    const secondsElement = document.getElementById("seconds");
+    const countdownInterval = setInterval(updateCountdown, 1000);
 
     function updateCountdown() {
       const difference = matchData - new Date();
 
-      if (difference <= 0) {
+      if (Number.isNaN(matchData.getTime()) || difference <= 0) {
         daysElement.textContent = "00";
         hoursElement.textContent = "00";
         minutesElement.textContent = "00";
         secondsElement.textContent = "00";
+        clearInterval(countdownInterval);
         return;
       }
 
@@ -43,6 +46,5 @@ if (matchData) {
     }
 
     updateCountdown();
-    setInterval(updateCountdown, 1000);
   }
 }

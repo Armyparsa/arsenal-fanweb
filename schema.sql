@@ -1,0 +1,74 @@
+PRAGMA foreign_keys = ON;
+
+CREATE TABLE IF NOT EXISTS users (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  username TEXT UNIQUE NOT NULL,
+  is_admin INTEGER NOT NULL DEFAULT 0,
+  password TEXT NOT NULL,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE IF NOT EXISTS matches (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  opponent TEXT NOT NULL,
+  match_datetime TEXT NOT NULL,
+  competition TEXT NOT NULL,
+  stadium TEXT NOT NULL,
+  home_score INTEGER,
+  away_score INTEGER,
+  result_confirmed INTEGER NOT NULL DEFAULT 0
+);
+
+CREATE TABLE IF NOT EXISTS news (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  title TEXT NOT NULL,
+  description TEXT NOT NULL,
+  image TEXT NOT NULL,
+  content TEXT NOT NULL,
+  author TEXT NOT NULL,
+  published_at TEXT NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS players (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  name TEXT UNIQUE NOT NULL,
+  shirt_number INTEGER NOT NULL,
+  positions TEXT NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS predictions (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  user_id INTEGER NOT NULL,
+  match_id INTEGER NOT NULL,
+  home_score INTEGER NOT NULL,
+  away_score INTEGER NOT NULL,
+  points INTEGER DEFAULT 0,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+
+  FOREIGN KEY (user_id) REFERENCES users(id),
+  FOREIGN KEY (match_id) REFERENCES matches(id),
+
+  UNIQUE (user_id, match_id)
+);
+
+CREATE TABLE IF NOT EXISTS lineups (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  user_id INTEGER NOT NULL UNIQUE,
+  formation TEXT NOT NULL,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+
+  FOREIGN KEY (user_id) REFERENCES users(id)
+);
+
+CREATE TABLE IF NOT EXISTS lineup_players (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  lineup_id INTEGER NOT NULL,
+  player_id INTEGER NOT NULL,
+  slot TEXT NOT NULL,
+
+  FOREIGN KEY (lineup_id) REFERENCES lineups(id),
+  FOREIGN KEY (player_id) REFERENCES players(id),
+
+  UNIQUE (lineup_id, slot),
+  UNIQUE (lineup_id, player_id)
+);
