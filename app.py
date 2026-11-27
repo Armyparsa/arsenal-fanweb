@@ -205,7 +205,7 @@ def predictions():
         predictions.home_score AS predicted_home,
         predictions.away_score AS predicted_away
         FROM matches LEFT JOIN predictions ON matches.id = predictions.match_id
-        AND predictions.user_id = ? ORDER BY WHEN matches.match_datetime > CURRENT_TIMESTAMP
+        AND predictions.user_id = ? ORDER BY CASE WHEN matches.match_datetime > CURRENT_TIMESTAMP
         AND matches.result_confirmed = 0 THEN 0
         ELSE 1
         END,
