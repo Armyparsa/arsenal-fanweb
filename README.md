@@ -61,6 +61,12 @@ The database schema defines seven tables:
 
 The database file is created locally from `schema.sql`. Match fixtures are intentionally not generated automatically; add the fixtures you want to manage to the `matches` table.
 
+## Demo Video
+
+Watch the demonstration of Arsenal Fan Web:
+
+[Arsenal Fan Web - CS50 Final Project](https://youtu.be/y85yfF_YuE8?si=E7AUtiM0RHeJxX_-)
+
 ## Installation and setup
 
 Use Python 3.10 or newer.
